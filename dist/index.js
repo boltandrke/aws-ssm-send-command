@@ -28,8 +28,8 @@ try {
     const inputs = SanitizeInputs();
     // AWS Configure
     aws_sdk_1.default.config.update({
-        accessKeyId: inputs.accessKeyId,
-        secretAccessKey: inputs.secretAccessKey,
+//        accessKeyId: inputs.accessKeyId,
+//        secretAccessKey: inputs.secretAccessKey,
         region: inputs.region,
     });
     // Run Send Command

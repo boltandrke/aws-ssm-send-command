@@ -8,8 +8,8 @@ try {
 
   // AWS Configure
   AWS.config.update({
-    accessKeyId: inputs.accessKeyId,
-    secretAccessKey: inputs.secretAccessKey,
+//    accessKeyId: inputs.accessKeyId,
+//    secretAccessKey: inputs.secretAccessKey,
     region: inputs.region,
   });
 
