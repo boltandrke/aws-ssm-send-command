@@ -34,7 +34,7 @@ try {
     });
     // Run Send Command
     const ssm = new aws_sdk_1.default.SSM();
-    ssm.sendCommand();
+//    ssm.sendCommand();
     ssm.sendCommand({
         InstanceIds: inputs.instanceIds,
         DocumentName: inputs.documentName,
