@@ -22,8 +22,9 @@ try {
       DocumentName: inputs.documentName,
       Comment: inputs.comment,
       Parameters: {
-        workingDirectory: [inputs.workingDirectory],
-        commands: [inputs.command],
+        sha: [inputs.sha],
+        tag: [inputs.tag],
+        branch: [inputs.branch],
       },
     },
     (err: AWSError, data: SendCommandResult) => {
@@ -49,23 +50,23 @@ function SanitizeInputs() {
 
   // SSM Send Command
   const _instanceIds = core.getInput("instance-ids", { required: true });
-  const _command = core.getInput("command");
-  const _workingDirectory = core.getInput("working-directory");
   const _comment = core.getInput("comment");
+  const _branch = core.getInput("branch");
+  const _tag = core.getInput("tag");
+  const _sha = core.getInput("branch");
+  const _documentName = core.getInput("document");
 
   // customized not supported yet, will be updated soon.
-  const _documentName = "AWS-RunShellScript";
-  const _outputS3BucketName = "your-s3-bucket-name";
-  const _outputS3KeyPrefix = "your-s3-bucket-directory-name";
-
+ // customized not supported yet, will be updated soon.
   return {
     accessKeyId: _accessKeyId,
     secretAccessKey: _secretAccessKey,
     region: _region,
     instanceIds: _instanceIds.split(/\n/),
-    command: _command,
-    documentName: _documentName,
-    workingDirectory: _workingDirectory,
     comment: _comment,
+    documentName: _documentName,
+    branch: _branch,
+    tag: _tag,
+    sha: _sha,
   };
 }
