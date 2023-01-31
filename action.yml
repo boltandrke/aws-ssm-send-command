@@ -29,6 +29,10 @@ inputs:
   tag:
     required: true
     description: "Deploy tag"
+  document:
+    required: true
+    description: "SSM Document name"
+
   comment:
     required: false
     description: "Comment for Send-Command"
