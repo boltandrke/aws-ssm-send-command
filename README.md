@@ -34,16 +34,16 @@ jobs:
       - uses: actions/checkout@v2
 
       - name: AWS SSM Send-Command
-        uses: peterkimzz/aws-ssm-send-command@master
+        uses: boltandrke/aws-ssm-send-command@master
         id: ssm
         with:
           aws-region: ${{ secrets.AWS_REGION }}
           aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           instance-ids: ${{ secrets.INSTANCE_ID }}
-
-          working-directory: /home/ubuntu/application
-          command: ls -al
+          branch: ${{ steps.meta.branch }}
+          tag: ${{ steps.meta.tag }}
+          sha: ${{ steps.meta.sha }}
           comment: Hello world!
 
       # Catch SSM outputs
@@ -80,28 +80,31 @@ instance-ids: |
   i-0b1f8b18a1d450002
 ```
 
-### `command`
+### `branch`
 
-Bash command you want to execute in a EC2 instance.
+Repo branch name
 
 ```yml
 # default
-command: echo $(date) >> logs.txt
-
-# restart your pm2 service
-command: pm2 restart 0
-
-# or execute shell script
-command: /bin/sh restart.sh
+branch: main
 ```
 
-### `working-directory`
+### `tag`
 
-Where bash command executes.
+Repo tag name
 
 ```yml
 # default
-working-directory: /home/ubuntu
+tag: v1.2.3
+```
+
+### `sha`
+
+Repo sha
+
+```yml
+# default
+tag: dqjoi22
 ```
 
 ### `comment`
