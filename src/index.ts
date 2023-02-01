@@ -1,5 +1,5 @@
 // import AWS object without services
-import AWS from 'aws-sdk';
+import AWS from 'aws-sdk/global';
 import {AWSError} from 'aws-sdk/lib/error';
 import * as core from "@actions/core";
 import * as github from "@actions/github";
