@@ -59,12 +59,9 @@ function SanitizeInputs() {
   var _accessKeyId
   var _secretAccessKey
 
-  if (_assumeRole == "true") {
-    const _accessKeyId = core.getInput("aws-access-key-id", { required: false });
-    const _secretAccessKey = core.getInput("aws-secret-access-key", {required: false });
-  } else {
-    const _accessKeyId = core.getInput("aws-access-key-id", { required: true });
-    const _secretAccessKey = core.getInput("aws-secret-access-key", {required: true });
+  if (_assumeRole != "true") {
+     _accessKeyId = core.getInput("aws-access-key-id", { required: true });
+     _secretAccessKey = core.getInput("aws-secret-access-key", {required: true });
   }
   const _region = core.getInput("aws-region", { required: true });
 
