@@ -68,11 +68,11 @@ function SanitizeInputs() {
 
   // SSM Send Command
   const _instanceIds = core.getInput("instance-ids", { required: true });
-  const _comment = core.getInput("comment");
-  const _branch = core.getInput("branch");
-  const _tag = core.getInput("tag");
-  const _sha = core.getInput("branch");
-  const _documentName = core.getInput("document");
+  const _comment = core.getInput("comment", { required: true });
+  const _branch = core.getInput("branch", { required: true });
+  const _tag = core.getInput("tag", { required: true });
+  const _sha = core.getInput("branch", { required: true });
+  const _documentName = core.getInput("document", { required: true });
   return {
     accessKeyId: _accessKeyId,
     secretAccessKey: _secretAccessKey,
