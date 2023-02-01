@@ -1,40 +1,25 @@
 "use strict";
-var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
-    if (k2 === undefined) k2 = k;
-    Object.defineProperty(o, k2, { enumerable: true, get: function() { return m[k]; } });
-}) : (function(o, m, k, k2) {
-    if (k2 === undefined) k2 = k;
-    o[k2] = m[k];
-}));
-var __setModuleDefault = (this && this.__setModuleDefault) || (Object.create ? (function(o, v) {
-    Object.defineProperty(o, "default", { enumerable: true, value: v });
-}) : function(o, v) {
-    o["default"] = v;
-});
-var __importStar = (this && this.__importStar) || function (mod) {
-    if (mod && mod.__esModule) return mod;
-    var result = {};
-    if (mod != null) for (var k in mod) if (k !== "default" && Object.prototype.hasOwnProperty.call(mod, k)) __createBinding(result, mod, k);
-    __setModuleDefault(result, mod);
-    return result;
-};
-var __importDefault = (this && this.__importDefault) || function (mod) {
-    return (mod && mod.__esModule) ? mod : { "default": mod };
-};
-Object.defineProperty(exports, "__esModule", { value: true });
-const aws_sdk_1 = __importDefault(require("aws-sdk"));
-const core = __importStar(require("@actions/core"));
+exports.__esModule = true;
+// import AWS object without services
+var aws_sdk_1 = require("aws-sdk");
+var core = require("@actions/core");
 try {
-    const inputs = SanitizeInputs();
+    var inputs = SanitizeInputs();
     // AWS Configure
-    aws_sdk_1.default.config.update({
-//        accessKeyId: inputs.accessKeyId,
-//        secretAccessKey: inputs.secretAccessKey,
-        region: inputs.region,
-    });
+    if (inputs.assumeRole == "true") {
+        aws_sdk_1["default"].config.update({
+            region: inputs.region
+        });
+    }
+    else {
+        aws_sdk_1["default"].config.update({
+            accessKeyId: inputs.accessKeyId,
+            secretAccessKey: inputs.secretAccessKey,
+            region: inputs.region
+        });
+    }
     // Run Send Command
-    const ssm = new aws_sdk_1.default.SSM();
-//    ssm.sendCommand();
+    var ssm = new aws_sdk_1["default"].SSM();
     ssm.sendCommand({
         InstanceIds: inputs.instanceIds,
         DocumentName: inputs.documentName,
@@ -42,36 +27,47 @@ try {
         Parameters: {
             sha: [inputs.sha],
             tag: [inputs.tag],
-            branch: [inputs.branch],
-            },
-    }, (err, data) => {
-        var _a;
+            branch: [inputs.branch]
+        }
+    }, function (err) {
         if (err)
             throw err;
-        console.log(data);
-        core.setOutput("command-id", (_a = data.Command) === null || _a === void 0 ? void 0 : _a.CommandId);
+        console.log(err);
+        core.setOutput('AWSError', err);
     });
 }
 catch (err) {
-    console.error(err, err.stack);
-    core.setFailed(err);
+    if (err instanceof TypeError) {
+        console.error(err, err.stack);
+        core.setFailed(err);
+    }
+    else {
+        console.error(err);
+        core.setFailed("Unknown error");
+    }
 }
 function SanitizeInputs() {
     // AWS
-    const _accessKeyId = core.getInput("aws-access-key-id", { required: true });
-    const _secretAccessKey = core.getInput("aws-secret-access-key", {
-        required: true,
-    });
-    const _region = core.getInput("aws-region", { required: true });
+    var _assumeRole = core.getInput("aws-assume-role", { required: false });
+    var _accessKeyId;
+    var _secretAccessKey;
+    if (_assumeRole == "true") {
+        var _accessKeyId_1 = core.getInput("aws-access-key-id", { required: false });
+        var _secretAccessKey_1 = core.getInput("aws-secret-access-key", { required: false });
+    }
+    else {
+        var _accessKeyId_2 = core.getInput("aws-access-key-id", { required: true });
+        var _secretAccessKey_2 = core.getInput("aws-secret-access-key", { required: true });
+    }
+    var _region = core.getInput("aws-region", { required: true });
     // SSM Send Command
-    const _instanceIds = core.getInput("instance-ids", { required: true });
-    const _comment = core.getInput("comment");
-    // customized not supported yet, will be updated soon.
-    const _branch = core.getInput("branch");
-    const _tag = core.getInput("tag");
-    const _sha = core.getInput("branch");
-    const _documentName = core.getInput("document");
-      return {
+    var _instanceIds = core.getInput("instance-ids", { required: true });
+    var _comment = core.getInput("comment");
+    var _branch = core.getInput("branch");
+    var _tag = core.getInput("tag");
+    var _sha = core.getInput("branch");
+    var _documentName = core.getInput("document");
+    return {
         accessKeyId: _accessKeyId,
         secretAccessKey: _secretAccessKey,
         region: _region,
@@ -81,6 +77,6 @@ function SanitizeInputs() {
         branch: _branch,
         tag: _tag,
         sha: _sha,
-
+        assumeRole: _assumeRole
     };
 }
