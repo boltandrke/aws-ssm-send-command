@@ -8,6 +8,9 @@ branding:
 description: "Remote EC2 bash command execution."
 
 inputs:
+  aws-assume-role:
+    required: true
+    description: "Is this AWS user have assumed role"
   aws-access-key-id:
     required: false
     description: "AWS access key id"
