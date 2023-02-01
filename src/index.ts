@@ -1,5 +1,6 @@
 // import AWS object without services
 import AWS from 'aws-sdk/global';
+import { SSM } from 'aws-sdk';
 import {AWSError} from 'aws-sdk/lib/error';
 import * as core from "@actions/core";
 import * as github from "@actions/github";
@@ -23,7 +24,7 @@ try {
 
 
   // Run Send Command
-  const ssm = new AWS.SSM();
+  const ssm = new SSM();
   ssm.sendCommand(
     {
       InstanceIds: inputs.instanceIds,
